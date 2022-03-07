@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrainningManagerService.Context;
 
@@ -10,9 +11,10 @@ using TrainningManagerService.Context;
 namespace TrainningManagerService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220303161414_PlanChange")]
+    partial class PlanChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +61,6 @@ namespace TrainningManagerService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("BodyAreas")
-                        .HasColumnType("int");
-
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -76,6 +75,28 @@ namespace TrainningManagerService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Plans");
+                });
+
+            modelBuilder.Entity("TrainningManagerService.Entities.Database.PlanBodyArea", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("BodyArea")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("PlanId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("PlanBodyArea");
                 });
 
             modelBuilder.Entity("TrainningManagerService.Entities.Database.Video", b =>
@@ -134,6 +155,13 @@ namespace TrainningManagerService.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TrainningManagerService.Entities.Database.PlanBodyArea", b =>
+                {
+                    b.HasOne("TrainningManagerService.Entities.Database.Plan", null)
+                        .WithMany("BodyAreas")
+                        .HasForeignKey("PlanId");
+                });
+
             modelBuilder.Entity("TrainningManagerService.Entities.Database.Video", b =>
                 {
                     b.HasOne("TrainningManagerService.Entities.Database.Author", "Author")
@@ -146,6 +174,11 @@ namespace TrainningManagerService.Migrations
             modelBuilder.Entity("TrainningManagerService.Entities.Database.Author", b =>
                 {
                     b.Navigation("Videos");
+                });
+
+            modelBuilder.Entity("TrainningManagerService.Entities.Database.Plan", b =>
+                {
+                    b.Navigation("BodyAreas");
                 });
 #pragma warning restore 612, 618
         }

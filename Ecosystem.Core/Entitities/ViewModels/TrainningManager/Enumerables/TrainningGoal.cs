@@ -8,6 +8,7 @@
         BodyBuilding,
         Toning,
         Flexibility,
-        Fun
+        Fun,
+        Mixed
     }
 }

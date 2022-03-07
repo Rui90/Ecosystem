@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Core.Base.Interfaces;
 using Core.Entitities;
+using Ecosystem.Core.Base.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 
 namespace Core.Base.Implementations
 {
@@ -10,59 +12,43 @@ namespace Core.Base.Implementations
             where T : class, IEntity
     {
         public readonly ILogger<ICrudDomainService<T>> Logger;
-        public readonly DbContext DbContext;
+        public readonly IRepository<T> _repository;
         public readonly IMapper Mapper;
 
         public CrudDomainService(
             ILogger<ICrudDomainService<T>> logger,
             IMapper mapper,
-            DbContext dbContext)
+            IRepository<T> repository)
         {
             Logger = logger;
-            DbContext = dbContext;
+            _repository = repository;
             Mapper = mapper;
         }
 
-        public async Task<T> Create(T entity)
+        public virtual T Create(T entity)
         {
-            var mappedEntitiy = Mapper.Map<T>(entity);
-            DbContext.Add(mappedEntitiy);
-            mappedEntitiy.CreatedAt = DateTime.UtcNow;
-            await DbContext.SaveChangesAsync();
-            return entity;
+            return _repository.Create(entity);
         }
 
-        public async Task Delete(Guid id)
+        public virtual void Delete(Guid id)
         {
-            var entity = await DbContext.FindAsync<T>(id);
-            if (entity != null)
-            {
-                DbContext.Remove(entity);
-                await DbContext.SaveChangesAsync();
-            }
+            _repository.Delete(id);
         }
 
-        public PaginatedViewModel<T> GetAll(int currentPage, int pageSize)
+        public virtual PaginatedViewModel<T> GetAll(int currentPage, int pageSize, params Expression<Func<T, object>>[] includes)
         {
-            var counter = DbContext.Set<T>().Count();
-            var entries = DbContext.Set<T>()
-                .OrderBy(x => x.CreatedAt)
-                .Skip(currentPage)
-                .Take(pageSize);
-
-            return new PaginatedViewModel<T>(entries.ToList(), counter);
+            return _repository.GetAll(currentPage, pageSize, includes);
         }
 
-        public async Task<T> Update(Guid id, T entity)
+        public virtual T GetById(Guid id, params Expression<Func<T, object>>[] includes)
         {
-            var foundEntity = await DbContext.FindAsync<T>(id);
-            if (foundEntity != null)
-            {
-                var mappedEntity = Mapper.Map<T>(entity);
-                DbContext.Update(mappedEntity);
-                await DbContext.SaveChangesAsync();
-            }
-            return entity;
+            return _repository.GetById(id, includes);
+        }
+
+        public virtual T Update(Guid id, T entity)
+        {
+            return _repository.Update(entity);
+            
         }
     }
 }

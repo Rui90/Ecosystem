@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Base
 {
+    [Route("[controller]")]
     public class CrudController<T, K> : ControllerBase
         where T : IViewModel
         where K : class, IEntity
@@ -23,21 +24,21 @@ namespace Core.Base
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(T entity)
+        public IActionResult Create([FromBody] T entity)
         {
-            return Created(string.Empty, await ViewService.Create(entity));
+            return Created(string.Empty, ViewService.Create(entity));
         }
 
         [HttpPut("{entityId:Guid}")]
-        public async Task<IActionResult> Update(Guid entityId, T entity)
+        public IActionResult Update(Guid entityId, [FromBody] T entity)
         {
-            return Ok(await ViewService.Update(entityId, entity));
+            return Ok(ViewService.Update(entityId, entity));
         }
 
         [HttpDelete("{entityId:Guid}")]
-        public async Task<IActionResult> Delete(Guid entityId)
+        public IActionResult Delete(Guid entityId)
         {
-            await ViewService.Delete(entityId);
+            ViewService.Delete(entityId);
             return Ok();
         }
 
@@ -45,6 +46,12 @@ namespace Core.Base
         public IActionResult FindAll(int currentPage = 0, int pageSize = 10)
         {
             return Ok(ViewService.GetAll(currentPage, pageSize));
+        }
+
+        [HttpGet("{entityId:Guid}")]
+        public IActionResult GetById(Guid entityId)
+        {
+            return Ok(ViewService.GetById(entityId));
         }
     }
 }

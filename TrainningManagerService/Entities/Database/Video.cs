@@ -23,6 +23,8 @@ namespace TrainningManagerService.Entities.Database
 
         public long DurationInSeconds { get; set; }
 
-        public virtual ICollection<Plan> Plan { get; set; }
+        public virtual ICollection<Plan>? Plan { get; set; }
+
+        public virtual Author? Author { get; set; }
     }
 }

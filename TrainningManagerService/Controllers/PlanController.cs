@@ -19,9 +19,15 @@ namespace TrainningManagerService.Controllers
         }
 
         [HttpPost("generate")]
-        public IActionResult GeneratePlan(PlanGeneratorViewModel model)
+        public IActionResult GeneratePlan([FromBody] PlanGeneratorViewModel model)
         {
             return Ok(_planViewService.GeneratePlan(model));
+        }
+
+        [HttpPost("{planId}/video/add/{videoId}")]
+        public IActionResult AddVideo(Guid planId, Guid videoId)
+        {
+            return Ok(_planViewService.AddVideoToPlan(planId, videoId));
         }
     }
 }

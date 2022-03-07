@@ -1,22 +1,22 @@
 ﻿using AutoMapper;
 using Core.Base.Implementations;
-using Core.Base.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using TrainningManagerService.Context;
+using Ecosystem.Core.Base.Interfaces;
 using TrainningManagerService.DomainServices.Interfaces;
 using TrainningManagerService.Entities.Database;
 
 namespace TrainningManagerService.DomainServices.Implementations
 {
+
     public class PlanDomainService : CrudDomainService<Plan>, IPlanDomainService
     {
 
         private readonly IVideoDomainService _videoDomainService;
+
         public PlanDomainService(
             ILogger<IPlanDomainService> logger, 
             IMapper mapper, 
-            ApplicationDbContext dbContext,
-            IVideoDomainService videoDomainService) : base(logger, mapper, dbContext)
+            IRepository<Plan> repository,
+            IVideoDomainService videoDomainService) : base(logger, mapper, repository)
         {
             _videoDomainService = videoDomainService;
         }
@@ -24,7 +24,7 @@ namespace TrainningManagerService.DomainServices.Implementations
         public async Task<Plan> GeneratePlan(PlanGeneratorViewModel model)
         {
 
-            var videos = await _videoDomainService.FilterVideos(model.TrainningPeriodInMinutes, model.VideoGoal, model.Area);
+            var videos = await _videoDomainService.FilterVideos(null, model.TrainningPeriodInMinutes, model.VideoGoal, model.Area);
             var videosCopy = videos.Entries.ToList();
             var finalListOfVideos = new List<Video>();
             var currentTrainningPeriod = 0.00;
@@ -53,9 +53,33 @@ namespace TrainningManagerService.DomainServices.Implementations
             {
                 Name = "GeneratedPlan",
                 CreatedAt = DateTime.UtcNow,
-                DurationInSeconds = Convert.ToInt64(currentTrainningPeriod),
                 Videos = finalListOfVideos
             };
+        }
+
+        public async Task<bool> AddVideoToPlan(Guid planId, Guid videoId)
+        {
+            try
+            {
+                var video = _videoDomainService.GetById(videoId);
+                var plan = GetById(planId, include => include.Videos);
+                if (video != null && plan != null)
+                {
+                    if (plan.Videos != null)
+                    {
+                        plan.Videos.Add(video);
+                    } else
+                    {
+                        plan.Videos = new List<Video> { video };
+                    }
+                    base.Update(plan.Id, plan);
+                }
+                return true;
+            } catch(Exception ex)
+            {
+                throw;
+            }
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Core.Entitities;
+using Core.Entitities.ViewModels.TrainningManager.Enumerables;
 
 namespace TrainningManagerService.Entities.Database
 {
@@ -9,8 +10,11 @@ namespace TrainningManagerService.Entities.Database
 
         public string Name { get; set; }
 
-        public long DurationInSeconds { get; set; }
+        public TrainningGoal? TrainningGoal { get; set; }
 
         public virtual ICollection<Video> Videos { get; set; }
+
+        public BodyArea BodyAreas { get; set; }
+
     }
 }

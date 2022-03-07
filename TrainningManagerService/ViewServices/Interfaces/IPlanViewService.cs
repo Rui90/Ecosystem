@@ -8,5 +8,7 @@ namespace TrainningManagerService.ViewServices.Interfaces
     {
         Task<PlanViewModel> GeneratePlan(PlanGeneratorViewModel model);
 
+        Task<bool> AddVideoToPlan(Guid planId, Guid videoId);
+
     }
 }

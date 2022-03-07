@@ -2,11 +2,6 @@
 using Core.Base.Interfaces;
 using Core.Entitities;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Base.Implementations
 {
@@ -29,29 +24,32 @@ namespace Core.Base.Implementations
             DomainService = domainService;
         }
 
-        public async Task<T> Create(T entity)
+        public virtual T Create(T entity)
         {
 
-            return Mapper.Map<T>(
-                await DomainService.Create(Mapper.Map<K>(entity)));
+            return Mapper.Map<T>(DomainService.Create(Mapper.Map<K>(entity)));
         }
 
-        public async Task Delete(Guid id)
+        public virtual void Delete(Guid id)
         {
-            await DomainService.Delete(id);
+            DomainService.Delete(id);
         }
 
-        public PaginatedViewModel<T> GetAll(int currentPage, int pageSize)
+        public virtual PaginatedViewModel<T> GetAll(int currentPage, int pageSize)
         {
             var result = DomainService.GetAll(currentPage, pageSize);
             return new PaginatedViewModel<T>(result.Entries.Select(r => Mapper.Map<T>(r)).ToList(), 
                 result.TotalEntries);
         }
 
-        public async Task<T> Update(Guid id, T entity)
+        public virtual T GetById(Guid id)
         {
-            return Mapper.Map<T>(
-                  await DomainService.Update(id, Mapper.Map<K>(entity)));
+            return Mapper.Map<T>(DomainService.GetById(id));
+        }
+
+        public virtual T Update(Guid id, T entity)
+        {
+            return Mapper.Map<T>(DomainService.Update(id, Mapper.Map<K>(entity)));
         }
     }
 }

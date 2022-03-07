@@ -1,4 +1,5 @@
 ﻿using Core.Entitities.ViewModels.TrainningManager.Enumerables;
+using Ecosystem.Core.Entitities.ViewModels.TrainningManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,8 +24,11 @@ namespace Core.Entitities.ViewModels.TrainningManager
 
         public TrainningGoal VideoGoal { get; set; }
 
+
         public bool EquipmentRequired { get; set; }
 
         public long DurationInSeconds { get; set; }
+
+        public AuthorViewModel? Author { get; set; }
     }
 }
