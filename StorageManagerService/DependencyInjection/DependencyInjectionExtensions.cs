@@ -1,4 +1,4 @@
-﻿using Ecosystem.Core.Base.Interfaces;
+﻿using Ecosystem.Services.Base.Interfaces;
 using StorageManagerService.Context;
 using StorageManagerService.DomainServices.Implementations;
 using StorageManagerService.DomainServices.Interfaces;

@@ -1,12 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using StorageManagerService.Context;
 using StorageManagerService.DependencyInjection;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -18,9 +23,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 builder.Services.AddServices();
 
-
 var app = builder.Build();
-
+app.UseCors(cors => cors
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .SetIsOriginAllowed(origin => true)
+               .AllowCredentials()
+           );
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

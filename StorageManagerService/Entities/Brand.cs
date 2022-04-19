@@ -1,4 +1,4 @@
-﻿using Core.Entitities;
+﻿using Ecosystem.Shared.Entitities;
 
 namespace StorageManagerService.Entities
 {

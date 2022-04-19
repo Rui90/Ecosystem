@@ -1,0 +1,106 @@
+﻿@using Ecosystem.Shared.Entitities.ViewModels.StoreRoomManager;
+@using Ecosystem.Shared.Entitities;
+@using Ecofrontend.Services.StorageService;
+@inject IProductService ProductService;
+@inject IDialogService DialogService
+
+@page "/storage"
+
+<PageTitle>Storage</PageTitle>
+
+<h1>Storage</h1>
+
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+    <MudTabPanel Text="Brands">
+        <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">
+            Create Brand
+        </MudButton>
+        @if (Brands != null && Brands.Entries != null && Brands.Entries.Any())
+        {
+            <MudTable Items="@Brands?.Entries.Take(4)" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
+                <HeaderContent>
+                    <MudTh>Name</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Name">@context.Name</MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </MudTabPanel>
+    <MudTabPanel Text="Products">
+        <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">
+            Create Product
+        </MudButton>
+        @if (Products != null && Products.Entries != null && Products.Entries.Any())
+        {
+            <MudTable Items="@Products?.Entries.Take(4)" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
+                <HeaderContent>
+                    <MudTh>Name</MudTh>
+                    <MudTh>Brand</MudTh>
+                    <MudTh>Quantity</MudTh>
+                    <MudTh>Measure</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Name">@context.Name</MudTd>
+                    <MudTd DataLabel="Brand">@context.Brand?.Name</MudTd>
+                    <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
+                    <MudTd DataLabel="Measure">@context.Measure</MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </MudTabPanel>
+    <MudTabPanel Text="Shopping List">
+        <MudText>Content Three</MudText>
+    </MudTabPanel>
+</MudTabs>
+
+
+
+
+@code {
+    private bool _hidePosition;
+    private bool _loading;
+    private PaginatedViewModel<ProductViewModel> Products { get; set; }
+    private PaginatedViewModel<BrandViewModel> Brands { get; set; }
+
+    public Position Position { get; set; } = Position.Left;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await ProductService.GetProducts();
+    }
+
+    private void OpenDialog()
+    {
+        RenderFragment renderFragment = (builder) => { builder.OpenComponent(0, typeof(CreateBrandComponent)); builder.CloseComponent(); };
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var parameters = new DialogParameters();
+        parameters.Add("Content", renderFragment);
+        DialogService.Show<Dialog>("Simple Dialog", parameters, options);
+    }
+      
+    private void OnSelectedValue(Position value)
+    {
+        switch (value)
+        {
+            case Position.Top:
+                Position = Position.Top;
+                break;
+            case Position.Start:
+                Position = Position.Start;
+                break;
+            case Position.Left:
+                Position = Position.Left;
+                break;
+            case Position.Right:
+                Position = Position.Right;
+                break;
+            case Position.End:
+                Position = Position.End;
+                break;
+            case Position.Bottom:
+                Position = Position.Bottom;
+                break;
+        }
+    }
+}

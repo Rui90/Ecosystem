@@ -1,5 +1,5 @@
-﻿using Core.Base;
-using Ecosystem.Core.Entitities.ViewModels.StoreRoomManager;
+﻿using Ecosystem.Services.Base;
+using Ecosystem.Shared.Entitities.ViewModels.StoreRoomManager;
 using StorageManagerService.Entities;
 using StorageManagerService.ViewServices.Interfaces;
 

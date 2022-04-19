@@ -1,7 +1,6 @@
-﻿using Core.Entitities;
-using Ecosystem.Core.Entitities.ViewModels.StoreRoomManager.Enumerables;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using Ecosystem.Shared.Entitities;
+using Ecosystem.Shared.Entitities.ViewModels.StoreRoomManager.Enumerables;
+
 
 namespace StorageManagerService.Entities
 {

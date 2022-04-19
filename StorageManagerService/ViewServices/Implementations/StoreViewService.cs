@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Core.Base.Implementations;
-using Ecosystem.Core.Entitities.ViewModels.StoreRoomManager;
+using Ecosystem.Services.Base.Implementations;
+using Ecosystem.Shared.Entitities.ViewModels.StoreRoomManager;
 using StorageManagerService.DomainServices.Interfaces;
 using StorageManagerService.Entities;
 using StorageManagerService.ViewServices.Interfaces;

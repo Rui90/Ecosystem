@@ -1,0 +1,21 @@
+﻿@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+
+
+<MudDialog>
+    <DialogContent>
+         @Content 
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+    <EventCallBackChild onDoneButtonClicked="Done"></EventCallBackChild>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public RenderFragment Content { get; set; }
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+}

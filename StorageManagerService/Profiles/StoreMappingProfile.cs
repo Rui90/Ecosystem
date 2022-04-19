@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Ecosystem.Core.Entitities.ViewModels.StoreRoomManager;
+using Ecosystem.Shared.Entitities.ViewModels.StoreRoomManager;
 using StorageManagerService.Entities;
 
 namespace StorageManagerService.Profiles

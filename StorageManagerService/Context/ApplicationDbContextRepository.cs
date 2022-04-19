@@ -1,5 +1,5 @@
-﻿using Core.Entitities;
-using Ecosystem.Core.Base.Implementations;
+﻿using Ecosystem.Services.Base.Implementations;
+using Ecosystem.Shared.Entitities;
 
 namespace StorageManagerService.Context
 {

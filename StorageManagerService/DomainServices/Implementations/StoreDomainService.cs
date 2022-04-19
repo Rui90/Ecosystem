@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Core.Base.Implementations;
-using Ecosystem.Core.Base.Interfaces;
+using Ecosystem.Services.Base.Implementations;
+using Ecosystem.Services.Base.Interfaces;
 using StorageManagerService.DomainServices.Interfaces;
 using StorageManagerService.Entities;
 
